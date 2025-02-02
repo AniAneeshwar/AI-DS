@@ -1,0 +1,69 @@
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import BaggingClassifier, AdaBoostClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Define the dataset
+data = {
+    'Feature 1': [1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5],
+    'Feature 2': [2.0, 1.0, 2.5, 3.0, 1.5, 4.0, 3.5, 5.0, 1.0],
+    'Target': [0, 1, 1, 0, 1, 1, 1, 0, 0]
+}
+df = pd.DataFrame(data)
+
+# Split the data into features and target
+X = df[['Feature 1', 'Feature 2']]
+y = df['Target']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# -------------------------------
+# Bagging Classifier with Decision Tree
+# -------------------------------
+# Create a Decision Tree classifier as the base estimator
+base_dt = DecisionTreeClassifier()
+
+# Create a BaggingClassifier using the Decision Tree as the base estimator
+bagging_model = BaggingClassifier(base_estimator=base_dt, n_estimators=10, random_state=42)
+
+# Train the Bagging model
+bagging_model.fit(X_train, y_train)
+
+# Make predictions using the Bagging model
+y_pred_bagging = bagging_model.predict(X_test)
+
+# Calculate Bagging accuracy
+bagging_accuracy = accuracy_score(y_test, y_pred_bagging)
+print("Bagging Accuracy:", bagging_accuracy)
+
+# -------------------------------
+# AdaBoost Classifier with Decision Tree
+# -------------------------------
+# Create a Decision Tree classifier as the base estimator
+base_dt_boost = DecisionTreeClassifier()
+
+# Create an AdaBoostClassifier using the Decision Tree as the base estimator
+boosting_model = AdaBoostClassifier(base_estimator=base_dt_boost, n_estimators=10, random_state=42)
+
+# Train the Boosting model
+boosting_model.fit(X_train, y_train)
+
+# Make predictions using the Boosting model
+y_pred_boosting = boosting_model.predict(X_test)
+
+# Calculate Boosting accuracy
+boosting_accuracy = accuracy_score(y_test, y_pred_boosting)
+print("Boosting Accuracy:", boosting_accuracy)
+
+# -------------------------------
+# Display results in a table
+# -------------------------------
+results = {
+    "Model": ["Bagging (Decision Tree)", "Boosting (Decision Tree)"],
+    "Accuracy": [bagging_accuracy, boosting_accuracy]
+}
+results_df = pd.DataFrame(results)
+print("\nResults Table:")
+print(results_df)

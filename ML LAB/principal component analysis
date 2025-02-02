@@ -1,0 +1,39 @@
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+
+# Input Data (as per the provided example)
+data = {
+    "Feature 1": [2.5, 0.5, 2.2, 1.9, 3.1],
+    "Feature 2": [2.4, 0.7, 2.9, 2.2, 3.0],
+    "Feature 3": [3.6, 0.9, 3.1, 2.7, 3.8]
+}
+df = pd.DataFrame(data)
+
+# Standardize the dataset
+scaler = StandardScaler()
+standardized_data = scaler.fit_transform(df)
+
+# Compute PCA
+pca = PCA(n_components=2)  # Selecting top 2 principal components
+principal_components = pca.fit_transform(standardized_data)
+
+# Creating DataFrame for PCA results
+pca_df = pd.DataFrame(principal_components, columns=["PC1", "PC2"])
+
+# Display explained variance ratio
+evr = pca.explained_variance_ratio_
+print("Explained Variance Ratio:", evr)
+
+# Display Principal Components (Eigenvectors)
+eigenvectors = pca.components_
+print("Principal Components (Eigenvectors):\n", eigenvectors)
+
+# Display Transformed Data
+print("\nTransformed Dataset:")
+print(pca_df)
+
+# Output DataFrame
+print("\nOutput DataFrame:")
+print(pca_df)
